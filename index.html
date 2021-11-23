@@ -8,6 +8,16 @@
 <body>
 <!-- Container -->
 <div class="container"></div>
+<div class="info">
+    <div class="info-wrapper">
+        <div class="title">
+            DynamicBox Inc.
+        </div>
+        <div class="subtitle">
+            - click to play -
+        </div>
+    </div>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r126/three.min.js" integrity="sha512-n8IpKWzDnBOcBhRlHirMZOUvEq2bLRMuJGjuVqbzUJwtTsgwOgK5aS0c1JA647XWYfqvXve8k3PtZdzpipFjgg==" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/three@0.126.0/examples/js/loaders/GLTFLoader.js"></script>
@@ -55,7 +65,12 @@
 
         // Light
         const ambient = new THREE.AmbientLight("#FFFFFF", 1);
+        ambient.position.set(0, 300, 500);
         scene.add(ambient);
+
+        const ambient2 = new THREE.AmbientLight("#FFFFFF", .5);
+        ambient2.position.set(500, 300, 500);
+        scene.add(ambient2);
 
         let light = new THREE.PointLight("#FF0000", 1);
         light.position.set(0, 300, 500);
