@@ -13,6 +13,16 @@
 <script src="https://unpkg.com/three@0.126.0/examples/js/loaders/GLTFLoader.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
 <script type="module">
+    let sound = new Howl({
+        src: ['https://res.cloudinary.com/n3pu/video/upload/v1571849541/80s_vibe.mp3'],
+        autoplay: true,
+        loop: true,
+        volume: 0.5,
+        onend: function() {}
+    });
+
+    sound.play();
+
     import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/controls/OrbitControls.js'
 
     let scene;
@@ -101,7 +111,11 @@
             requestAnimationFrame(animate);
             controls.update();
             particle.rotation.y +=.004;
-            model.rotation.y +=.003;
+
+            if (model) {
+                model.rotation.y +=.003;
+            }
+
             cubeMesh.rotation.x +=.010;
             cubeMesh.rotation.y +=.010;
             cubeMesh.rotation.z +=.010;
