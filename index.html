@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>PROJ02 - Phone Orbit View</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<!-- Container -->
+<div class="container"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r126/three.min.js" integrity="sha512-n8IpKWzDnBOcBhRlHirMZOUvEq2bLRMuJGjuVqbzUJwtTsgwOgK5aS0c1JA647XWYfqvXve8k3PtZdzpipFjgg==" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/three@0.126.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
+<script type="module">
+    import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/controls/OrbitControls.js'
+
+    let scene;
+    let camera;
+    let renderer;
+    let particle;
+
+    function init() {
+        let container = document.querySelector('.container');
+
+        // Scene
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color("#012345");
+
+        // Camera
+        camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+        camera.position.z = 1;
+
+        // Render
+        renderer = new THREE.WebGLRenderer({antialias: true});
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        container.appendChild(renderer.domElement);
+
+        // Orbit Control
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.update();
+        controls.enableDamping = true;
+        controls.minDistance = 10;
+
+        // Light
+        const ambient = new THREE.AmbientLight("#FFFFFF", 1);
+        scene.add(ambient);
+
+        let light = new THREE.PointLight("#FF0000", 1);
+        light.position.set(0, 300, 500);
+        scene.add(light);
+
+        let light2 = new THREE.PointLight("#ab00ff", 1);
+        light2.position.set(500, 300, 500);
+        scene.add(light2);
+
+        // Particles
+        particle = new THREE.Object3D();
+        scene.add(particle);
+
+        var particleGeometry = new THREE.TetrahedronGeometry(2, 0);
+        var particleMaterial = new THREE.MeshNormalMaterial();
+
+        for (var i = 0; i < 500; i++) {
+            var mesh = new THREE.Mesh(particleGeometry, particleMaterial);
+            mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
+            mesh.position.multiplyScalar(90 + (Math.random() * 700));
+            mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
+            particle.add(mesh);
+        }
+
+        // Cube
+        let cubeGeo = new THREE.BoxGeometry(2, 2, 2);
+        let cubeMaterial = new THREE.MeshNormalMaterial({color: "#9d7e00"});
+        let cubeMesh = new THREE.Mesh(cubeGeo, cubeMaterial);
+        cubeMesh.rotation.set(45, 45, 45);
+        scene.add(cubeMesh);
+
+        let model;
+
+        // Model
+        const loader = new THREE.GLTFLoader();
+        loader.load('./model/scene.gltf', gltf => {
+            model = gltf.scene;
+            scene.add(gltf.scene);
+        }, function (error) {
+            console.log('Error:' + error);
+        });
+
+        window.addEventListener('resize', onResize, false)
+
+        function onResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            particle.rotation.y +=.004;
+            model.rotation.y +=.003;
+            cubeMesh.rotation.x +=.010;
+            cubeMesh.rotation.y +=.010;
+            cubeMesh.rotation.z +=.010;
+            renderer.render(scene, camera);
+        }
+
+        animate();
+    }
+
+    init();
+</script>
+</body>
+</html>
