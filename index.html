@@ -86,11 +86,11 @@
         particle = new THREE.Object3D();
         scene.add(particle);
 
-        var particleGeometry = new THREE.TetrahedronGeometry(2, 0);
-        var particleMaterial = new THREE.MeshNormalMaterial();
+        let particleGeometry = new THREE.TetrahedronGeometry(2, 0);
+        let particleMaterial = new THREE.MeshNormalMaterial();
 
-        for (var i = 0; i < 500; i++) {
-            var mesh = new THREE.Mesh(particleGeometry, particleMaterial);
+        for (let i = 0; i < 500; i++) {
+            let mesh = new THREE.Mesh(particleGeometry, particleMaterial);
             mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
             mesh.position.multiplyScalar(90 + (Math.random() * 700));
             mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
